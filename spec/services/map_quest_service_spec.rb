@@ -44,7 +44,9 @@ RSpec.describe MapQuestService do
         expect(data[:results].first[:locations].first).to have_key(:latLng)
         expect(data[:results].first[:locations].first[:latLng]).to be_a(Hash)
         expect(data[:results].first[:locations].first[:latLng]).to have_key(:lat)
+        expect(data[:results].first[:locations].first[:latLng][:lat]).to be_a(Float)
         expect(data[:results].first[:locations].first[:latLng]).to have_key(:lng)
+        expect(data[:results].first[:locations].first[:latLng][:lng]).to be_a(Float)
       end
     end
   end
