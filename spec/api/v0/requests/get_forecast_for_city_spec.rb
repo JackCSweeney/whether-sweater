@@ -3,6 +3,18 @@ require 'rails_helper'
 RSpec.describe 'Request for Forecast by City' do
   before(:each) do
     @headers = {"CONTENT_TYPE" => "application/json"}
+    @location = "cincinatti,oh"
+    @coords = "39.10713,-84.50413"
+
+    json_response = File.read("spec/fixtures/geocoding/cincinatti_oh_geocode_response.json")
+
+    stub_request(:get, "https://www.mapquestapi.com/geocoding/v1/address?key=#{Rails.application.credentials.map_quest_key}&location=#{@location}")
+      .to_return(status: 200, body: json_response)  
+
+    json_response = File.read("spec/fixtures/weather/cincinatti_oh_weather_get_request.json")
+
+    stub_request(:get, "http://api.weatherapi.com/v1/forecast.json?key=#{Rails.application.credentials.weather_api}&q=#{@coords}&days=5&aqi=no&alerts=no")
+      .to_return(status: 200, body: json_response)
   end
 
   it 'returns the forecast for the given city in the correct format and doesnt return any other data' do
@@ -10,19 +22,18 @@ RSpec.describe 'Request for Forecast by City' do
 
     expect(response).to be_successful
 
-    response = JSON.parse(response.body, symbolize_names: true)
+    result = JSON.parse(response.body, symbolize_names: true)
 
-    expect(response).to have_key(:data)
-    expect(response[:data]).to be_a(Hash)
+    expect(result).to have_key(:data)
+    expect(result[:data]).to be_a(Hash)
 
     # Data
-    data = response[:data]
+    data = result[:data]
 
     expect(data).to have_key(:id)
     expect(data[:id]).to eq(nil)
-
     expect(data).to have_key(:type)
-    expect(data).to eq("forecast")
+    expect(data[:type]).to eq("forecast")
 
     # Attributes
     expect(data).to have_key(:attributes)
@@ -37,26 +48,19 @@ RSpec.describe 'Request for Forecast by City' do
     current_weather = attributes[:current_weather]
 
     expect(current_weather).to have_key(:last_updated)
-    expect(current_weather[:last_updated]).to eq("place holder date")
-
+    expect(current_weather[:last_updated]).to be_a(String)
     expect(current_weather).to have_key(:temperature)
-    expect(current_weather[:temperature]).to be_a(Float) # Should be temp in farenheit
-
+    expect(current_weather[:temperature]).to be_a(Float)
     expect(current_weather).to have_key(:feels_like)
-    expect(current_weather[:feels_like]).to be_a(Float) # Should be temp in farenheit
-
+    expect(current_weather[:feels_like]).to be_a(Float)
     expect(current_weather).to have_key(:humidity)
-    expect(current_weather[:humidity]).to be_a(Float)
-
+    expect(current_weather[:humidity]).to be_a(Integer)
     expect(current_weather).to have_key(:uvi)
     expect(current_weather[:uvi]).to be_a(Float)
-
     expect(current_weather).to have_key(:visibility)
     expect(current_weather[:visibility]).to be_a(Float)
-
-    expect(current_weather).to have_key(:conditions)
-    expect(current_weather[:conditions]).to be_a(String)
-
+    expect(current_weather).to have_key(:condition)
+    expect(current_weather[:condition]).to be_a(String)
     expect(current_weather).to have_key(:icon)
     expect(current_weather[:icon]).to be_a(String)
     expect(current_weather[:icon].include?(".png")).to eq(true)
@@ -80,8 +84,8 @@ RSpec.describe 'Request for Forecast by City' do
       expect(day[:max_temp]).to be_a(Float)
       expect(day).to have_key(:min_temp)
       expect(day[:min_temp]).to be_a(Float)
-      expect(day).to have_key(:conditions)
-      expect(day[:conditions]).to be_a(String)
+      expect(day).to have_key(:condition)
+      expect(day[:condition]).to be_a(String)
       expect(day).to have_key(:icon)
       expect(day[:icon]).to be_a(String)
       expect(day[:icon].include?(".png")).to eq(true)
@@ -100,8 +104,8 @@ RSpec.describe 'Request for Forecast by City' do
       expect(hour[:time]).to be_a(String)
       expect(hour).to have_key(:temperature)
       expect(hour[:temperature]).to be_a(Float)
-      expect(hour).to have_key(:conditions)
-      expect(hour[:conditions]).to be_a(String)
+      expect(hour).to have_key(:condition)
+      expect(hour[:condition]).to be_a(String)
       expect(hour).to have_key(:icon)
       expect(hour[:icon]).to be_a(String)
       expect(hour[:icon].include?(".png")).to eq(true)
