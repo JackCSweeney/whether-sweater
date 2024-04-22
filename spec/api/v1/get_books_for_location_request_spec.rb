@@ -77,10 +77,4 @@ RSpec.describe 'Get Books for Location Request' do
       end
     end
   end
-
-  describe 'sad path' do
-    it '' do
-
-    end
-  end
 end
