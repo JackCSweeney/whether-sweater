@@ -41,5 +41,24 @@ RSpec.describe BookFacade do
         end
       end
     end
+
+    describe '.make_books(books_info, quantity)' do
+      it 'creates the right number of book objects from the books info' do
+        books_info = BookService.get_books("denver,co")
+
+        expect(@facade.make_books(books_info, 5).all?(Book)).to eq(true)
+        expect(@facade.make_books(books_info, 5).count).to eq(5)
+      end
+    end
+
+    describe '.get_and_make_books(location, quantity)' do
+      it 'creates the right number of books and returns the total number found' do
+        result = @facade.get_and_make_books("denver,co", 5)
+
+        expect(result.first).to eq(781)
+        expect(result.last).to be_a(Array)
+        expect(result.last.all?(Book)).to eq(true)
+      end
+    end
   end
 end
