@@ -5,7 +5,7 @@ class BookFacade
 
   def self.make_books(books_info, quantity)
     books = books_info[:docs]
-    books.slice(0, quantity).map do |book_info|
+    books.slice(0, quantity.to_i).map do |book_info|
       Book.new(book_info)
     end
   end

@@ -3,6 +3,22 @@ require 'rails_helper'
 RSpec.describe 'Get Books for Location Request' do
   before(:each) do
     @headers = {"CONTENT_TYPE" => "application/json"}
+    @coords = "39.74001,-104.99202"
+
+    json_response = File.read("spec/fixtures/book_search/colorado_book_search.json")
+
+    stub_request(:get, "https://openlibrary.org/search.json?q=denver,co")
+      .to_return(status: 200, body: json_response)
+
+    json_response = File.read("spec/fixtures/weather/denver_co_weather_request.json")
+
+    stub_request(:get, "http://api.weatherapi.com/v1/forecast.json?key=#{Rails.application.credentials.weather_api}&q=#{@coords}&days=5&aqi=no&alerts=no")
+      .to_return(status: 200, body: json_response)
+
+    json_response = File.read("spec/fixtures/geocoding/denver_co_get_request.json")
+
+    stub_request(:get, "https://www.mapquestapi.com/geocoding/v1/address?key=#{Rails.application.credentials.map_quest_key}&location=denver,co")
+      .to_return(status: 200, body: json_response)
   end
 
   describe 'happy path' do
