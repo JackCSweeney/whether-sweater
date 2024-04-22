@@ -1,4 +1,8 @@
 class ErrorMessageSerializer
-  include JSONAPI::Serializer
-  attributes :message, :status_code
+  def self.serialize(error_message)
+    {
+      errors:
+        {message: error_message.message}
+    }
+  end
 end

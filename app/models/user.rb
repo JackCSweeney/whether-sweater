@@ -1,10 +1,10 @@
 class User < ApplicationRecord
+  before_create :generate_key
+
   validates :email, presence: true, uniqueness: true
-  validates :api_key, presence: true, uniqueness: true
+  validates :api_key, uniqueness: true
   validates :password, presence: true
   has_secure_password
-
-  before_create :generate_key
 
   private
   def generate_key
