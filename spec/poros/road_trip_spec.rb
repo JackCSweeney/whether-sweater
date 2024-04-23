@@ -34,5 +34,17 @@ RSpec.describe RoadTrip do
         expect(@road_trip.get_dest_weather(@forecast)).to eq({datetime: "2024-04-22 23:09", temperature: 54.4, condition: "Clear "})
       end
     end
+
+    describe '#temp_at_arrival(forecast)' do
+      it 'retuns the temperature at the estimated arrival time' do
+        expect(@road_trip.temp_at_arrival(@forecast)).to eq(54.4)
+      end
+    end
+
+    describe '#condition_at_arrival(forecast)' do
+      it 'returns the text of conditions at the estimated arrival time' do
+        expect(@road_trip.condition_at_arrival(@forecast)).to eq("Clear ")
+      end
+    end
   end
 end

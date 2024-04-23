@@ -97,5 +97,11 @@ RSpec.describe ForecastFacade do
         end
       end
     end
+
+    describe '.make_forecast' do
+      it 'creates a forecast object from the data' do
+        expect(@facade.make_forecast(@coords)).to be_a(Forecast)
+      end
+    end
   end
 end
