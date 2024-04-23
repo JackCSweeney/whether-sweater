@@ -6,7 +6,7 @@ class Api::V0::SessionsController < ApplicationController
     if user && user.authenticate(params[:password])
       render json: UserSerializer.serialize(user)
     else
-      render json: ErrorMessageSerializer.serialize(ErrorMessage.new("Error: Email/Password incorrect", 401)), status: 401
+      not_found_response
     end
   end
 
