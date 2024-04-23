@@ -37,6 +37,9 @@ RSpec.describe 'Create New User and Get API Key' do
       expect(attributes[:email]).to eq(@body[:email])
       expect(attributes).to have_key(:api_key)
       expect(attributes[:api_key]).to be_a(String)
+      expect(attributes).not_to have_key(:password)
+      expect(attributes).not_to have_key(:password_confirmation)
+      expect(attributes).not_to have_key(:password_digest)
     end
   end
 
