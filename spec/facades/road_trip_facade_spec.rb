@@ -51,7 +51,7 @@ RSpec.describe RoadTripFacade do
 
     describe 'get_road_trip(params)' do
       it 'gets the road trip object from the params passed in' do
-        params = {origin: @origin, destination: @destination, origin: @origin, destination: @destination}
+        params = {origin: @origin, destination: @destination}
 
         expect(@facade.get_road_trip(params)).to be_a(RoadTrip)
       end
