@@ -9,4 +9,8 @@ class MapQuestFacade
     lng = response[:results].first[:locations].first[:latLng][:lng]
     "#{lat},#{lng}"
   end
+
+  def self.get_directions(origin_coords, dest_coords)
+    MapQuestService.get_directions(origin_coords, dest_coords)
+  end
 end
