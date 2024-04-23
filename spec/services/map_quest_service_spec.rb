@@ -18,7 +18,6 @@ RSpec.describe MapQuestService do
     json_response = File.read("spec/fixtures/directions/oh_to_il_directions.json")
     stub_request(:get, "https://www.mapquestapi.com/directions/v2/route?from=39.10713,-84.50413&to=41.88425,-87.63245&key=#{Rails.application.credentials.map_quest_key}")
       .to_return(status: 200, body: json_response)
-
   end
 
   describe '.class methods' do
