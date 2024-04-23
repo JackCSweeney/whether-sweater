@@ -4,9 +4,9 @@ class RoadTrip
   def initialize(data)
     @start_city = data[:origin]
     @end_city = data[:destination]
-    @travel_time = data[:directions][:route][:formattedTime]
+    @travel_time = total_travel_time(data)
     @time = data[:directions][:route][:time]
-    @weather_at_eta = get_dest_weather(data[:forecast])
+    @weather_at_eta = get_dest_weather(data[:forecast]) unless total_travel_time(data) == "Impossible Route"
     @id = nil
   end
 
@@ -54,5 +54,13 @@ class RoadTrip
       end
     end
     condition
+  end
+
+  def total_travel_time(data)
+    if data[:directions][:route][:routeError]
+      "Impossible Route"
+    else
+      data[:directions][:route][:formattedTime]
+    end
   end
 end
