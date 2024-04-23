@@ -14,4 +14,17 @@ class MapQuestService
       req.params[:key] = Rails.application.credentials.map_quest_key
     end
   end
+
+  def self.get_directions(origin_coords, dest_coords)
+    response = get_directions_url(origin_coords, dest_coords)
+    JSON.parse(response.body, symbolize_names: true)
+  end
+
+  def self.get_directions_url(origin_coords, dest_coords)
+    conn.get("/directions/v2/route") do |req|
+      req.params[:from] = origin_coords
+      req.params[:to] = dest_coords
+      req.params[:key] = Rails.application.credentials.map_quest_key
+    end
+  end
 end
