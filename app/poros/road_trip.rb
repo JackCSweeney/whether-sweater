@@ -1,5 +1,5 @@
 class RoadTrip
-  attr_reader :start_city, :end_city, :travel_time, :weather_at_eta
+  attr_reader :start_city, :end_city, :travel_time, :weather_at_eta, :id
 
   def initialize(data)
     @start_city = data[:origin]
@@ -7,6 +7,7 @@ class RoadTrip
     @travel_time = data[:directions][:route][:formattedTime]
     @time = data[:directions][:route][:time]
     @weather_at_eta = get_dest_weather(data[:forecast])
+    @id = nil
   end
 
   def get_dest_weather(forecast)
